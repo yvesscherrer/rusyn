@@ -1,0 +1,264 @@
+# -*- coding: utf-8 -*-
+
+# removevowels*:
+	# 1 (Fall Endung auf Vokal): die beiden letzten Vokale stehenlassen, falls vorhanden
+	# 2 (Endung auf Konsonant): den Vokal vor dem schließenden Konsonanten stehen lassen
+	# 3 (Endung auf Vokal): den vorletzten Vokal noch löschen
+	# 4 (Endung auf Konsonant): den Vokal vor dem schließenden Konsonanten Vokal löschen
+# Z. 21 angepasst: nur am Wortanfang
+# Z. 44 angepasst: nur nach Vokal
+# remove direkt integriert
+
+# changes 4 oct:
+# use (->) rules
+# add UK apostrophe to removesigns
+# add PL rules
+
+# changes 22 dec:
+# fixed bug in plend
+
+clear stack
+
+define Vowel [а|е|и|о|у|э|ю|я|ё|ы|і|ї|є|й];
+define Consonant [? - Vowel];
+
+define removesigns [
+	ь -> 0,
+	ъ -> 0,
+	' -> 0
+];
+
+# keep word-initial and last vowel (group)
+define removevowels1 [
+	Vowel -> 0
+|| .#. Vowel* Consonant+ ?* _ ?* Consonant+ Vowel+ Consonant* .#. ];
+
+# if last vowel group is not word-final, only keep the last vowel of the group
+define removevowels2 [
+	Vowel -> 0
+|| _ Vowel Consonant+ .#. ];
+
+# second step: only keep last vowel
+define removevowels3 [
+	Vowel -> 0
+|| .#. Vowel* Consonant+ ?* _ ?* Vowel .#. ];
+
+# second step: remove vowel if vowel is not word-final
+define removevowels4 [
+	Vowel -> 0
+|| _ Consonant+ .#. ];
+
+
+define removeA [removesigns .o. removevowels1 .o. removevowels2];
+regex removeA;
+save stack removeA.fsm
+clear stack
+
+
+define removeB [removesigns .o. removevowels1 .o. removevowels2 .o. removevowels3 .o. removevowels4];
+regex removeB;
+save stack removeB.fsm
+clear stack
+
+
+
+################################################
+
+define rustart [
+	о (->) в і,
+	у (->) в у
+|| .#. _ ];
+
+
+define ruend [
+	т ь (->) т и,
+	ю (->) [в у|м],
+	т (->) [т ь|0],
+	о й (->) [у в|о в],
+	и е (->) я,
+	е (->) [о в і|у],
+	ш ь (->) ш,
+	м (->) м е
+|| _ .#. ];
+
+
+define ruvowend [
+	л (->) в
+|| Vowel _ .#. ];
+
+
+define rucontextfree [
+	к е (->) ц і,
+	г е (->) з і,
+	ц а (->) ц я,
+	ц ы (->) ц і,
+	ц (->) ц ь,
+	к т (->) х т,
+	з д н (->) з н,
+	т с т (->) ц т,
+	с (->) с ь,
+	г (->) ґ,
+	и (->) [і|ї],
+	ы (->) [у|и],
+	ë (->) ь о,
+	е (->) [і|о|ї|и|є],
+	о (->) [у|і|є]
+];
+
+define rurulesA [rucontextfree .o. rustart .o. ruvowend .o. ruend .o. removeA];
+regex rurulesA;
+save stack rurulesA.fsm
+clear stack
+
+define rurulesB [rucontextfree .o. rustart .o. ruvowend .o. ruend .o. removeB];
+regex rurulesB;
+save stack rurulesB.fsm
+clear stack
+
+define rurulesC [rucontextfree .o. rustart .o. ruvowend .o. ruend];
+regex rurulesC;
+save stack rurulesC.fsm
+clear stack
+
+################################################
+
+define ukend [
+	о ю (->) [у в|о в],
+	ю (->) [в у|м],
+	і (->) о в і,
+	м о (->) м е
+|| _ .#. ];
+
+
+define ukcontextfree [
+	з д н (->) з н,
+	т с т (->) ц т,
+	е (->) [є|и],
+	т т (->) т,
+	н н (->) н,
+	и (->) [і|ы|у],
+	і (->) у,
+	о (->) [є|у]
+];
+
+define ukrulesA [ ukcontextfree .o. ukend .o. removeA];
+regex ukrulesA;
+save stack ukrulesA.fsm
+clear stack
+
+define ukrulesB [ ukcontextfree .o. ukend .o. removeB];
+regex ukrulesB;
+save stack ukrulesB.fsm
+clear stack
+
+define ukrulesC [ ukcontextfree .o. ukend];
+regex ukrulesC;
+save stack ukrulesC.fsm
+clear stack
+
+################################################
+
+define skend [
+	т ь (->) т и,
+	м (->) в у,
+	о у (->) [у в|о в],
+	и е (->) я,
+	е (->) о в і
+|| _ .#. ];
+
+
+define skvowend [
+	л (->) в,
+	[..] -> [0|т ь]
+|| Vowel _ .#. ];
+
+
+define skstart [
+	о (->) в і,
+	у (->) в у
+|| .#. _ ];
+
+
+define skcontextfree [
+	ц е (->) ц і,
+	з и (->) з і,
+	к т (->) х т,
+	з д н (->) з н,
+	т с т (->) ц т,
+	и (->) [і|ї],
+	е (->) [і|о|и|є],
+	я (->) ї,
+	о (->) [у|і],
+	ы (->) [у|и],
+	с (->) с ь
+];
+
+define skrulesA [skcontextfree .o. skstart .o. skvowend .o. skend .o. removeA];
+regex skrulesA;
+save stack skrulesA.fsm
+clear stack
+
+define skrulesB [skcontextfree .o. skstart .o. skvowend .o. skend .o. removeB];
+regex skrulesB;
+save stack skrulesB.fsm
+clear stack
+
+define skrulesC [skcontextfree .o. skstart .o. skvowend .o. skend];
+regex skrulesC;
+save stack skrulesC.fsm
+clear stack
+
+################################################
+
+define plend [
+	т ь (->) т и,
+	м (->) в у,
+	у (->) [у в|о в],
+	и е (->) я,
+	е (->) о в і,
+	м ы (->) м е
+|| _ .#. ];
+
+
+define plvowend [
+	л (->) в,
+	[..] -> [0|т ь]
+|| Vowel _ .#. ];
+
+
+define plstart [
+	о (->) в і,
+	у (->) в у
+|| .#. _ ];
+
+
+define plcontextfree [
+	ц е (->) ц і,
+	д з и (->) з і,
+	к т (->) х т,
+	ж н (->) з н,
+	и (->) [і|ї],
+	е (->) [і|и|є],
+	я (->) і,
+	а (->) і,
+	є (->) ї,
+	о (->) [у|і],
+	y (->) і,
+	ы (->) [у|и],
+	г (->) ґ
+];
+
+define plrulesA [plcontextfree .o. plstart .o. plvowend .o. plend .o. removeA];
+regex plrulesA;
+save stack plrulesA.fsm
+clear stack
+
+define plrulesB [plcontextfree .o. plstart .o. plvowend .o. plend .o. removeB];
+regex plrulesB;
+save stack plrulesB.fsm
+clear stack
+
+define plrulesC [plcontextfree .o. plstart .o. plvowend .o. plend];
+regex plrulesC;
+save stack plrulesC.fsm
+clear stack
