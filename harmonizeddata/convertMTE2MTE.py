@@ -138,12 +138,14 @@ def convertCorpus(infilename, outfilename, correspondences, maxLengths, language
 	infile = open(infilename, "r", encoding="utf-8")
 	outfile = open(outfilename, "w", encoding="utf-8")
 	for line in infile:
+		if line.startswith("%% "):
+			continue
 		elements = line.split("\t")
 		word = elements[0].strip()
 		tag = elements[-1].strip()
 		if word == "":
 			outfile.write("\n")
-		elif (tag == ",") or (tag == "SENT") or (tag == "?"):
+		elif (tag == ",") or (tag == "SENT") or (tag == "?") or (tag == "-"):
 			outfile.write(word + "\t" + punctuationTag + "\n")
 		elif tag == "":
 			outfile.write(word + "\tX\n")
@@ -226,18 +228,19 @@ if __name__ == "__main__":
 	if "corpus_mte" not in os.listdir("."):
 		os.mkdir("corpus_mte")
 	
-	convertLexicon("../data/wfl-pl-cyrillic.txt", "lexicons_mte/pl-mte-cy.txt", corr, ml, "PL-MTE")
-	convertLexicon("../data/wfl-pl.txt", "lexicons_mte/pl-mte.txt", corr, ml, "PL-MTE")
-	convertLexicon("../data/wfl-sk-cyrillic.txt", "lexicons_mte/sk-mte-cy.txt", corr, ml, "SK-MTE")
-	convertLexicon("../data/wfl-sk.txt", "lexicons_mte/sk-mte.txt", corr, ml, "SK-MTE")
-	convertLexicon("../data/wfl-uk.txt", "lexicons_mte/uk-mte.txt", corr, ml, "UK-MTE")
-	convertLexicon("../data/wfl-ru.txt", "lexicons_mte/ru-mte.txt", corr, ml, "RU-MTE")
-	convertLexicon("../data/wfl-mte-uk.txt", "lexicons_mte/uk-ugtag-old.txt", corr, ml, "UK-UGTAG")
-	convertLexicon("../data/ukdata_2017_01_24/lexicon_reordered.txt", "lexicons_mte/uk-ugtag.txt", corr, ml, "UK-UGTAG")
-	convertLexicon("../data/wfl-tnt-ru.txt", "lexicons_mte/ru-tnt.txt", corr, ml, "RU-TNT")
-	convertTntFiles("../data/snyat-msd", "lexicons_mte/tnt-ru", corr, ml)
-	convertCorpus("../data/rusyndata_2016_12_22/1000tokens_corrected_AR_punctuation_AS_2_YS.txt", "corpus_mte/RUE1000.gold.txt", corr, ml, "RUE")
-	convertCorpus("../data/ukdata_2017_01_24/train_reordered.txt", "corpus_mte/uk2.train.txt", corr, ml, "UK-UGTAG")
+	# convertLexicon("../data/wfl-pl-cyrillic.txt", "lexicons_mte/pl-mte-cy.txt", corr, ml, "PL-MTE")
+	# convertLexicon("../data/wfl-pl.txt", "lexicons_mte/pl-mte.txt", corr, ml, "PL-MTE")
+	# convertLexicon("../data/wfl-sk-cyrillic.txt", "lexicons_mte/sk-mte-cy.txt", corr, ml, "SK-MTE")
+	# convertLexicon("../data/wfl-sk.txt", "lexicons_mte/sk-mte.txt", corr, ml, "SK-MTE")
+	# convertLexicon("../data/wfl-uk.txt", "lexicons_mte/uk-mte.txt", corr, ml, "UK-MTE")
+	# convertLexicon("../data/wfl-ru.txt", "lexicons_mte/ru-mte.txt", corr, ml, "RU-MTE")
+	# convertLexicon("../data/wfl-mte-uk.txt", "lexicons_mte/uk-ugtag-old.txt", corr, ml, "UK-UGTAG")
+	# convertLexicon("../data/ukdata_2017_01_24/lexicon_reordered.txt", "lexicons_mte/uk-ugtag.txt", corr, ml, "UK-UGTAG")
+	# convertLexicon("../data/wfl-tnt-ru.txt", "lexicons_mte/ru-tnt.txt", corr, ml, "RU-TNT")
+	# convertTntFiles("../data/snyat-msd", "lexicons_mte/tnt-ru", corr, ml)
+	# convertCorpus("../data/rusyndata_2016_12_22/1000tokens_corrected_AR_punctuation_AS_2_YS.txt", "corpus_mte/RUE1000.gold.txt", corr, ml, "RUE")
+	# convertCorpus("../data/ukdata_2017_01_24/train_reordered.txt", "corpus_mte/uk2.train.txt", corr, ml, "UK-UGTAG")
+	convertCorpus("../ukwiki/tagged_01.txt", "corpus_mte/ukwiki1M.train.txt", corr, ml, "UK-UGTAG")
 	
 	displayUnknown()
 	

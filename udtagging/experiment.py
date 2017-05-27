@@ -284,6 +284,24 @@ def exp3():
 	)
 
 
+# merged models with additional Czech data, without lexicon
+def exp3b():
+	experiment(
+		"exp3b",
+		{"all6.downsample": ("all6.downsample.train", None), "all6.upsample": ("all6.upsample.train", None)},
+		("pl.dev", "sk.dev", "uk.dev", "cs.dev", "ru1.dev", "ru2.dev", "RUE1000", "RUE80000")
+	)
+
+
+# merged models with additional TnT-tagged Ukrainian data and Czech
+def exp3c():
+	experiment(
+		"exp3c",
+		{"all7.upsample": ("all7.upsample.train", None)},
+		("pl.dev", "sk.dev", "uk.dev", "cs.dev", "ru1.dev", "ru2.dev", "RUE1000", "RUE80000")
+	)
+
+
 # merged nolex model with induced lexicons
 def exp4():
 	global lexiconpath

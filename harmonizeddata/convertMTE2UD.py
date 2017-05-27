@@ -26,7 +26,7 @@ def convertTag(tag, correspondences, maincorrespondences):
 	
 	if tag == "":
 		return None, None
-	elif tag in ("SENT", ",", ":", "?", "!", ";"):
+	elif tag in ("SENT", ",", ":", "?", "!", ";", "-"):
 		return "PUNCT", "_"
 	else:
 		pos = tag[0]
@@ -158,19 +158,20 @@ def displayUnknown():
 
 
 if __name__ == "__main__":
-	if "lexicons_ud" not in os.listdir("."):
-		os.mkdir("lexicons_ud")
-	for filename in ("pl-mte-cy", "pl-mte", "ru-mte", "ru-tnt", "sk-mte-cy", "sk-mte", "uk-mte", "uk-ugtag-old", "uk-ugtag"):
-		convertLexicon("lexicons_mte/{}.txt".format(filename), "lexicons_ud/{}.txt".format(filename))
+	# if "lexicons_ud" not in os.listdir("."):
+		# os.mkdir("lexicons_ud")
+	# for filename in ("pl-mte-cy", "pl-mte", "ru-mte", "ru-tnt", "sk-mte-cy", "sk-mte", "uk-mte", "uk-ugtag-old", "uk-ugtag"):
+		# convertLexicon("lexicons_mte/{}.txt".format(filename), "lexicons_ud/{}.txt".format(filename))
 	
-	if "corpus_ud" not in os.listdir("."):
-		os.mkdir("corpus_ud")
-	convertCorpus("corpus_mte/RUE1000.gold.txt", "corpus_ud/RUE1000.gold.txt", rawfilename="corpus_ud/RUE1000.txt")
-	convertCorpus("corpus_mte/uk2.train.txt", "corpus_ud/uk2.train.txt")
+	# if "corpus_ud" not in os.listdir("."):
+		# os.mkdir("corpus_ud")
+	# convertCorpus("corpus_mte/RUE1000.gold.txt", "corpus_ud/RUE1000.gold.txt", rawfilename="corpus_ud/RUE1000.txt")
+	# convertCorpus("corpus_mte/uk2.train.txt", "corpus_ud/uk2.train.txt")
 	
-	if "inducedlexicons_ud" not in os.listdir("."):
-		os.mkdir("inducedlexicons_ud")
-	for id in ("exact", "rules", "levenshtein", "leven_rules", "rules_leven"):
-		convertInducedLexicon("../induction/{}.unif.txt".format(id), "inducedlexicons_ud/{}.txt".format(id))
+	# if "inducedlexicons_ud" not in os.listdir("."):
+		# os.mkdir("inducedlexicons_ud")
+	# for id in ("exact", "rules", "levenshtein", "leven_rules", "rules_leven"):
+		# convertInducedLexicon("../induction/{}.unif.txt".format(id), "inducedlexicons_ud/{}.txt".format(id))
+	convertCorpus("corpus_mte/ukwiki1M.train.txt", "corpus_ud/ukwiki1M.train.txt")
 	displayUnknown()
 

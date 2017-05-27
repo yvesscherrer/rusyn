@@ -7,6 +7,9 @@ pl_dict = {'a': 'а', 'e': 'е', 'y': 'ы', 'o': 'о', 'ó': 'у', 'u': 'у', '�
 
 sk_dict = {'ďa': 'дя', 'ľa': 'ля', 'ťa': 'тя', 'ďu': 'дю', 'ľu': 'лю', 'ťu': 'тю', 'ď': 'дь', 'ľ': 'ль', 'ť': 'ть', 'ňa': 'ня', 'ňu': 'ню', 'ň': 'нь', '’u': 'ю', '’e': 'є', 'je': 'є', 'ie': 'ие', 'jo': 'ьо', 'ji': 'ї', 'jí': 'ї', 'ch': 'х', 'šč': 'щ', '”': 'ъ', 'ju': 'ю', 'jú': 'ю', 'ja': 'я', 'já': 'я', 'ä': 'я', 'a': 'а', 'á': 'а', 'b': 'б', 'v': 'в', 'w': 'в', 'h': 'г', 'g': 'ґ', 'd': 'д', 'e': 'е', 'é': 'е', 'ž': 'ж', 'z': 'з', 'y': 'ы', 'j': 'й', 'i': 'и', 'í': 'и', 'k': 'к', 'l': 'л', 'ĺ': 'ол', 'm': 'м', 'n': 'н', 'o': 'о', 'ó': 'о', 'ô': 'о', 'p': 'п', 'q': 'кв', 'r': 'р', 'ŕ': 'ер', 's': 'с', 't': 'т', 'u': 'у', 'ú': 'у', 'f': 'ф', 'c': 'ц', 'č': 'ч', 'š': 'ш', 'ŷ': 'ы', 'ý': 'ы', 'y': 'ы', '’': 'ь', 'ė': 'э', 'ŭ': 'ў', 'ö': 'ë'}
 
+cs_dict = {'ďa': 'дя', 'ľa': 'ля', 'ťa': 'тя', 'ďu': 'дю', 'ľu': 'лю', 'ťu': 'тю', 'ď': 'дь', 'ľ': 'ль', 'ť': 'ть', 'ňa': 'ня', 'ňu': 'ню', 'ň': 'нь', '’u': 'ю', '’e': 'є', 'je': 'є', 'ie': 'ие', 'jo': 'ьо', 'ji': 'ї', 'jí': 'ї', 'ch': 'х', 'šč': 'щ', 'řa': 'ря', '”': 'ъ', 'ju': 'ю', 'jú': 'ю', 'ja': 'я', 'já': 'я', 'ä': 'я', 'a': 'а', 'á': 'а', 'b': 'б', 'v': 'в', 'w': 'в', 'h': 'г', 'g': 'ґ', 'd': 'д', 'e': 'е', 'é': 'е', 'ě': 'і', 'ž': 'ж', 'z': 'з', 'y': 'ы', 'j': 'й', 'i': 'и', 'í': 'и', 'k': 'к', 'l': 'л', 'ĺ': 'ол', 'm': 'м', 'n': 'н', 'o': 'о', 'ó': 'о', 'ô': 'о', 'p': 'п', 'q': 'кв', 'r': 'р', 'ŕ': 'р', 'ř': 'р', 's': 'с', 't': 'т', 'u': 'у', 'ú': 'у', 'ů': 'у', 'f': 'ф', 'x': 'кс', 'c': 'ц', 'č': 'ч', 'š': 'ш', 'ŷ': 'ы', 'ý': 'ы', 'y': 'ы', '’': 'ь', 'ė': 'э', 'ŭ': 'ў', 'ö': 'ë'}
+
+
 
 unknown = collections.defaultdict(int)
 changes = collections.defaultdict(int)
@@ -54,6 +57,9 @@ def reformat(name1, name2, language, addRaw=False):
 			elif language == "SK":
 				token = transliterateWord(token, sk_dict)
 				lemma = transliterateWord(lemma, sk_dict)
+			elif language == "CS":
+				token = transliterateWord(token, cs_dict)
+				lemma = transliterateWord(lemma, cs_dict)
 			postag = elements[3]
 			morphstr = elements[5]
 			if morphstr == "":
@@ -124,39 +130,30 @@ if __name__ == "__main__":
 	if "corpus_ud" not in os.listdir("."):
 		os.mkdir("corpus_ud")
 
-	reformat("../data/ud-treebanks-v1.4/UD_Polish/pl-ud-train.conllu", "corpus_ud/pl.train.txt", "PL")
-	reformat("../data/ud-treebanks-v1.4/UD_Polish/pl-ud-dev.conllu", "corpus_ud/pl.dev.gold.txt", "PL", addRaw="corpus_ud/pl.dev.txt")
-	reformat("../data/ud-treebanks-v1.4/UD_Polish/pl-ud-test.conllu", "corpus_ud/pl.test.gold.txt", "PL", addRaw="corpus_ud/pl.test.txt")
+	# reformat("../data/ud-treebanks-v1.4/UD_Polish/pl-ud-train.conllu", "corpus_ud/pl.train.txt", "PL")
+	# reformat("../data/ud-treebanks-v1.4/UD_Polish/pl-ud-dev.conllu", "corpus_ud/pl.dev.gold.txt", "PL", addRaw="corpus_ud/pl.dev.txt")
+	# reformat("../data/ud-treebanks-v1.4/UD_Polish/pl-ud-test.conllu", "corpus_ud/pl.test.gold.txt", "PL", addRaw="corpus_ud/pl.test.txt")
 	
-	reformat("../data/ud-treebanks-v1.4/UD_Slovak/sk-ud-train.conllu", "corpus_ud/sk.train.txt", "SK")
-	reformat("../data/ud-treebanks-v1.4/UD_Slovak/sk-ud-dev.conllu", "corpus_ud/sk.dev.gold.txt", "SK", addRaw="corpus_ud/sk.dev.txt")
-	reformat("../data/ud-treebanks-v1.4/UD_Slovak/sk-ud-test.conllu", "corpus_ud/sk.test.gold.txt", "SK", addRaw="corpus_ud/sk.test.txt")
+	# reformat("../data/ud-treebanks-v1.4/UD_Slovak/sk-ud-train.conllu", "corpus_ud/sk.train.txt", "SK")
+	# reformat("../data/ud-treebanks-v1.4/UD_Slovak/sk-ud-dev.conllu", "corpus_ud/sk.dev.gold.txt", "SK", addRaw="corpus_ud/sk.dev.txt")
+	# reformat("../data/ud-treebanks-v1.4/UD_Slovak/sk-ud-test.conllu", "corpus_ud/sk.test.gold.txt", "SK", addRaw="corpus_ud/sk.test.txt")
 	
-	reformat("../data/ud-treebanks-v1.4/UD_Ukrainian/uk-ud-train.conllu", "corpus_ud/uk1.train.txt", "UK")
-	reformat("../data/ud-treebanks-v1.4/UD_Ukrainian/uk-ud-dev.conllu", "corpus_ud/uk1.dev.gold.txt", "UK", addRaw="corpus_ud/uk1.dev.txt")
-	reformat("../data/ud-treebanks-v1.4/UD_Ukrainian/uk-ud-test.conllu", "corpus_ud/uk1.test.gold.txt", "UK", addRaw="corpus_ud/uk1.test.txt")
+	# reformat("../data/ud-treebanks-v1.4/UD_Ukrainian/uk-ud-train.conllu", "corpus_ud/uk1.train.txt", "UK")
+	# reformat("../data/ud-treebanks-v1.4/UD_Ukrainian/uk-ud-dev.conllu", "corpus_ud/uk1.dev.gold.txt", "UK", addRaw="corpus_ud/uk1.dev.txt")
+	# reformat("../data/ud-treebanks-v1.4/UD_Ukrainian/uk-ud-test.conllu", "corpus_ud/uk1.test.gold.txt", "UK", addRaw="corpus_ud/uk1.test.txt")
 	
-	reformat("../data/ud-treebanks-v1.4/UD_Russian/ru-ud-train.conllu", "corpus_ud/ru1.train.txt", "RU")
-	reformat("../data/ud-treebanks-v1.4/UD_Russian/ru-ud-dev.conllu", "corpus_ud/ru1.dev.gold.txt", "RU", addRaw="corpus_ud/ru1.dev.txt")
-	reformat("../data/ud-treebanks-v1.4/UD_Russian/ru-ud-test.conllu", "corpus_ud/ru1.test.gold.txt", "RU", addRaw="corpus_ud/ru1.test.txt")
+	# reformat("../data/ud-treebanks-v1.4/UD_Russian/ru-ud-train.conllu", "corpus_ud/ru1.train.txt", "RU")
+	# reformat("../data/ud-treebanks-v1.4/UD_Russian/ru-ud-dev.conllu", "corpus_ud/ru1.dev.gold.txt", "RU", addRaw="corpus_ud/ru1.dev.txt")
+	# reformat("../data/ud-treebanks-v1.4/UD_Russian/ru-ud-test.conllu", "corpus_ud/ru1.test.gold.txt", "RU", addRaw="corpus_ud/ru1.test.txt")
 	
-	reformat("../data/ud-treebanks-v1.4/UD_Russian-SynTagRus/ru_syntagrus-ud-train.conllu", "corpus_ud/ru2.train.txt", "RU")
-	reformat("../data/ud-treebanks-v1.4/UD_Russian-SynTagRus/ru_syntagrus-ud-dev.conllu", "corpus_ud/ru2.dev.gold.txt", "RU", addRaw="corpus_ud/ru2.dev.txt")
-	reformat("../data/ud-treebanks-v1.4/UD_Russian-SynTagRus/ru_syntagrus-ud-test.conllu", "corpus_ud/ru2.test.gold.txt", "RU", addRaw="corpus_ud/ru2.test.txt")
+	# reformat("../data/ud-treebanks-v1.4/UD_Russian-SynTagRus/ru_syntagrus-ud-train.conllu", "corpus_ud/ru2.train.txt", "RU")
+	# reformat("../data/ud-treebanks-v1.4/UD_Russian-SynTagRus/ru_syntagrus-ud-dev.conllu", "corpus_ud/ru2.dev.gold.txt", "RU", addRaw="corpus_ud/ru2.dev.txt")
+	# reformat("../data/ud-treebanks-v1.4/UD_Russian-SynTagRus/ru_syntagrus-ud-test.conllu", "corpus_ud/ru2.test.gold.txt", "RU", addRaw="corpus_ud/ru2.test.txt")
+
+	reformat("../data/ud-treebanks-v1.4/UD_Czech/cs-ud-train.conllu", "corpus_ud/cs.train.txt", "CS")
+	reformat("../data/ud-treebanks-v1.4/UD_Czech/cs-ud-dev.conllu", "corpus_ud/cs.dev.gold.txt", "CS", addRaw="corpus_ud/cs.dev.txt")
+	reformat("../data/ud-treebanks-v1.4/UD_Czech/cs-ud-test.conllu", "corpus_ud/cs.test.gold.txt", "CS", addRaw="corpus_ud/cs.test.txt")
 	
 	displayUnknown()
-	
-	# the following commands require the uk2.train.txt file, generated by convertMTE2UD.py
-	os.system("cat corpus_ud/uk1.train.txt corpus_ud/uk2.train.txt > corpus_ud/uk.train.txt")	# uk.train = uk1.train + uk2.train
-	os.system("cat corpus_ud/uk1.dev.txt corpus_ud/uk1.test.txt > corpus_ud/uk.dev.txt")		# uk.dev = uk1.dev + uk1.test
-	os.system("cat corpus_ud/uk1.dev.gold.txt corpus_ud/uk1.test.gold.txt > corpus_ud/uk.dev.gold.txt")		# uk.dev = uk1.dev + uk1.test
-	
-	os.system("head -n 89886 corpus_ud/ru2.train.txt > corpus_ud/ru2_short.train.txt")
-	os.system("cat corpus_ud/pl.train.txt corpus_ud/sk.train.txt corpus_ud/uk.train.txt corpus_ud/ru1.train.txt corpus_ud/ru2_short.train.txt > corpus_ud/all.train.txt")
-	os.system("cat corpus_ud/pl.train.txt corpus_ud/sk.train.txt corpus_ud/uk.train.txt corpus_ud/ru1.train.txt > corpus_ud/all-ru2.train.txt")
-	os.system("cat corpus_ud/pl.train.txt corpus_ud/sk.train.txt corpus_ud/uk.train.txt corpus_ud/ru2_short.train.txt > corpus_ud/all-ru1.train.txt")
-	os.system("cat corpus_ud/pl.train.txt corpus_ud/sk.train.txt corpus_ud/ru1.train.txt corpus_ud/ru2_short.train.txt > corpus_ud/all-uk.train.txt")
-	os.system("cat corpus_ud/pl.train.txt corpus_ud/uk.train.txt corpus_ud/ru1.train.txt corpus_ud/ru2_short.train.txt > corpus_ud/all-sk.train.txt")
-	os.system("cat corpus_ud/sk.train.txt corpus_ud/uk.train.txt corpus_ud/ru1.train.txt corpus_ud/ru2_short.train.txt > corpus_ud/all-pl.train.txt")
-	os.system("cut -f 1 ../data/rusyndata_2016_12_22/rusinfull_2016_11_11.txt > corpus_ud/RUE80000.txt")
+
 
